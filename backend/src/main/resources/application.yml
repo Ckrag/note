@@ -3,6 +3,8 @@ micronaut:
     name: backend
   server:
     port: 8080
+    cors:
+      enabled: true
 netty:
   default:
     allocator:

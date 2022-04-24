@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cors Test</title>
+</head>
+<body>
+
+<script>
+
+    const request = new Request('http://0.0.0.0:8080/note/all', {method: 'GET'});
+
+    fetch(request)
+  .then(response => {
+    if (response.status === 200) {
+      return response.json();
+    } else {
+      throw new Error('Something went wrong on API server!');
+    }
+  })
+  .then(response => {
+    console.debug(response);
+  }).catch(error => {
+    console.error(error);
+  });
+</script>
+</body>
+</html>
