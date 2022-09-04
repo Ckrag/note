@@ -9,12 +9,12 @@ services:
       - POSTGRES_PASSWORD=postgres
     ports:
       - "5432:5432"
-    profiles: ["frontend-dev", "backend-dev"]
 
   backend:
     build: backend/.
+    volumes:
+      - ./backend/:/code
     ports:
-      - "8080:8080"
+      - "8000:8000"
     depends_on:
       - db
-    profiles: ["frontend-dev"]
