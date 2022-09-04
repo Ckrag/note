@@ -1,26 +1,27 @@
 package com.note
 
 import io.micronaut.http.HttpResponse
-import io.micronaut.http.MediaType
-import io.micronaut.http.annotation.Body
-import io.micronaut.http.annotation.Consumes
-import io.micronaut.http.annotation.Controller
-import io.micronaut.http.annotation.Get
-import io.micronaut.http.annotation.PathVariable
-import io.micronaut.http.annotation.Post
-import io.micronaut.http.annotation.Produces
-import io.micronaut.http.annotation.QueryValue
+import io.micronaut.http.MediaType.TEXT_PLAIN
+import io.micronaut.http.annotation.*
+import io.micronaut.security.annotation.Secured
+import io.micronaut.security.rules.SecurityRule
 import io.micronaut.validation.Validated
 import jakarta.inject.Inject
-import java.util.Optional
+import java.security.Principal
+import java.util.*
 import javax.validation.Valid
 
 @Validated
+@Secured(SecurityRule.IS_AUTHENTICATED)
 @Controller("/note")
 class NoteController {
 
     @Inject
     lateinit var noteRepo: NoteRepository
+
+    @Produces(TEXT_PLAIN)
+    @Get
+    fun index(principal: Principal): String = principal.name
 
     @Get(value = "/all")
     fun getNotes(): HttpResponse<List<Note>> {
