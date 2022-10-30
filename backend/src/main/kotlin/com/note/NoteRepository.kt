@@ -1,16 +1,20 @@
 package com.note
 
-import io.micronaut.context.annotation.Executable
-import io.micronaut.data.annotation.*
-import io.micronaut.data.repository.CrudRepository
-import java.util.*
+import jakarta.inject.Inject
+import jooq.Tables
+import org.jooq.DSLContext
 
-@Repository
-interface NoteRepository : CrudRepository<Note, Long>{
 
-    // TODO: https://micronaut-projects.github.io/micronaut-data/latest/guide/#joinQueries
+class NoteRepository {
 
-    @Executable
-    fun findByTitle(title: String): List<Note>
+    @Inject
+    lateinit var dslCtx: DSLContext
+
+    fun findByTitle(title: String): List<Note> {
+        return this.dslCtx
+            .select().from(Tables.NOTE)
+            .where(jooq.tables.Note.NOTE.TITLE.eq(title))
+            .fetchInto(Note::class.java)
+    }
 
 }

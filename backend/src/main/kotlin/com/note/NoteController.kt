@@ -24,23 +24,25 @@ class NoteController {
     fun index(principal: Principal): String = principal.name
 
     @Get(value = "/all")
-    fun getNotes(): HttpResponse<List<Note>> {
-        return HttpResponse.ok(this.noteRepo.findAll().toList())
+    fun getNotes(): HttpResponse<List<NoteDto>> {
+        return HttpResponse.ok(this.noteRepo.findByTitle(""))
     }
 
     @Get
-    fun getNoteByTitle(@QueryValue title: String): HttpResponse<List<Note>> {
+    fun getNoteByTitle(@QueryValue title: String): HttpResponse<List<NoteDto>> {
         return HttpResponse.ok(this.noteRepo.findByTitle(title).toList())
     }
 
     @Get(value = "/{id}")
-    fun getNoteByTitle(@PathVariable id: Long): Optional<Note> {
-        return this.noteRepo.findById(id) ?: Optional.empty<Note>()
+    fun getNoteByTitle(@PathVariable id: Long): Optional<NoteDto> {
+        //return this.noteRepo.findById(id) ?: Optional.empty<Note>()
+        return Optional.empty()
     }
 
     @Post
-    fun createNote(@Body @Valid note: Note): HttpResponse<Note> {
-        val saved = this.noteRepo.save(note)
-        return HttpResponse.created(saved)
+    fun createNote(@Body @Valid note: NoteDto): HttpResponse<NoteDto> {
+        //val saved = this.noteRepo.save(note)
+        //return HttpResponse.created(saved)
+        return HttpResponse.created(note)
     }
 }

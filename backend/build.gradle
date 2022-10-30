@@ -1,15 +1,79 @@
+import org.jooq.meta.jaxb.Logging
+
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "1.6.10"
-    id("org.jetbrains.kotlin.kapt") version "1.6.10"
-    id("org.jetbrains.kotlin.plugin.allopen") version "1.6.10"
+    id("org.jetbrains.kotlin.jvm") version "${kotlinVersion}"
+    id("org.jetbrains.kotlin.kapt") version "${kotlinVersion}"
+    id("org.jetbrains.kotlin.plugin.allopen") version "${kotlinVersion}"
     id("com.github.johnrengelman.shadow") version "7.1.2"
     id("io.micronaut.application") version "3.3.0"
-    id("org.jetbrains.kotlin.plugin.jpa") version "1.6.10"
+    id("org.jetbrains.kotlin.plugin.jpa") version "${kotlinVersion}"
+    id("nu.studer.jooq") version "7.1.1"
 }
 
 version = "0.1"
 group = "com.note"
 
+jooq {
+    //version = '3.16.4'  // default (can be omitted)
+    //edition = JooqEdition.OSS  // default (can be omitted)
+
+    configurations {
+        main {  // name of the jOOQ configuration
+            generateSchemaSourceOnCompilation = false  // default (can be omitted)
+
+            generationTool {
+                logging = Logging.WARN
+                jdbc {
+                    driver = 'org.postgresql.Driver'
+                    //url = "jdbc:postgresql://localhost:5432/sample"
+                    url =  System.getenv("JDBC_URL") ?: "jdbc:postgresql://0.0.0.0:5432/postgres"
+                    //user = "some_user"
+                    user = System.getenv("JDBC_USER") ?: "postgres"
+                    //password = "some_secret"
+                    password = System.getenv("JDBC_PASSWORD") ?: "postgres"
+                    /* dev: org.postgresql.util.PSQLException: The server does not support SSL.
+                    properties {
+                        property {
+                            key = 'ssl'
+                            value = 'true'
+                        }
+                    }
+                    */
+                }
+                generator {
+                    name = 'org.jooq.codegen.DefaultGenerator'
+                    database {
+                        name = 'org.jooq.meta.postgres.PostgresDatabase'
+                        inputSchema = 'public'
+                        forcedTypes {
+                            forcedType {
+                                name = 'varchar'
+                                includeExpression = '.*'
+                                includeTypes = 'JSONB?'
+                            }
+                            forcedType {
+                                name = 'varchar'
+                                includeExpression = '.*'
+                                includeTypes = 'INET'
+                            }
+                        }
+                    }
+                    generate {
+                        deprecated = false
+                        records = true
+                        immutablePojos = false
+                        fluentSetters = true
+                    }
+                    target {
+                        packageName = 'jooq'
+                        directory = 'src/main/kotlin/com/note/database'  // default (can be omitted)
+                    }
+                    strategy.name = 'org.jooq.codegen.DefaultGeneratorStrategy'
+                }
+            }
+        }
+    }
+}
 
 repositories {
     mavenCentral()
@@ -18,12 +82,17 @@ repositories {
 dependencies {
     kapt("io.micronaut.data:micronaut-data-processor:3.3.0")
 
+    jooqGenerator("org.postgresql:postgresql:42.5.0")
+
+    implementation("org.springframework.security:spring-security-crypto:5.7.3")
+
     // DB stuff
     // kapt("io.micronaut.liquibase:micronaut-liquibase")
-    kapt("jakarta.persistence:jakarta.persistence-api:2.2")
-    implementation("io.micronaut.data:micronaut-data-hibernate-jpa:3.3.0")
+    //kapt("jakarta.persistence:jakarta.persistence-api:2.2")
+    //implementation("io.micronaut.data:micronaut-data-hibernate-jpa:3.3.0")
     implementation("io.micronaut.sql:micronaut-jdbc-tomcat")
     implementation('org.postgresql:postgresql:9.3-1100-jdbc4')
+    //implementation("org.jooq:jooq:3.16.4")
 
     implementation("io.micronaut.reactor:micronaut-reactor")
     implementation("io.micronaut.security:micronaut-security-jwt")

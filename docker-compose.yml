@@ -1,4 +1,5 @@
 version: "3.9"
+# TODO: Lock image versions
 services:
   db:
     image: postgres
@@ -7,10 +8,23 @@ services:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-      - JDBC_URL=jdbc:postgresql://db:5432/postgres
+      - JDBC_URL=jdbc:postgresql://0.0.0.0:5432/postgres
     ports:
       - "5432:5432"
-    profiles: ["frontend-dev", "backend-dev"]
+    profiles:
+      - "frontend-dev"
+      - "backend-dev"
+
+  migration:
+    image: flyway/flyway
+    command: -url=jdbc:postgresql://db:5432/postgres -user=postgres -password=postgres migrate
+    volumes:
+      - ./backend/flyway/sql:/flyway/sql
+    profiles:
+      - "frontend-dev"
+      - "backend-dev"
+    depends_on:
+      - db
 
   backend:
     build: backend/.
@@ -18,4 +32,5 @@ services:
       - "8080:8080"
     depends_on:
       - db
-    profiles: ["frontend-dev"]
+    profiles:
+      - "frontend-dev"

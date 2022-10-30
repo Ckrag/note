@@ -1,11 +1,7 @@
 package com.note
 
-import javax.persistence.*
 
-
-@Entity
-data class Note(@Id
-                @GeneratedValue
+data class Note(
                 var id: Long,
                 var title: String,
                 var content: String,
