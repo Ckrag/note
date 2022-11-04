@@ -14,10 +14,9 @@ import javax.validation.Valid
 @Validated
 @Secured(SecurityRule.IS_AUTHENTICATED)
 @Controller("/note")
-class NoteController {
-
-    @Inject
-    lateinit var noteRepo: NoteRepository
+class NoteController(
+    private val noteRepo: NoteRepository
+) {
 
     @Produces(TEXT_PLAIN)
     @Get
@@ -25,7 +24,7 @@ class NoteController {
 
     @Get(value = "/all")
     fun getNotes(): HttpResponse<List<NoteDto>> {
-        return HttpResponse.ok(this.noteRepo.findByTitle(""))
+        return HttpResponse.ok(this.noteRepo.getAll())
     }
 
     @Get

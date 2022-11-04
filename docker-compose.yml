@@ -2,7 +2,7 @@ version: "3.9"
 # TODO: Lock image versions
 services:
   db:
-    image: postgres
+    image: postgres:bullseye
     restart: always
     environment:
       - POSTGRES_DB=postgres

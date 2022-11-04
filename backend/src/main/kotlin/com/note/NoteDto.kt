@@ -1,7 +1,7 @@
 package com.note
 
 
-data class Note(
+data class NoteDto(
                 var id: Long,
                 var title: String,
                 var content: String,

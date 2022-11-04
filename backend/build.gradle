@@ -8,6 +8,7 @@ plugins {
     id("io.micronaut.application") version "3.3.0"
     id("org.jetbrains.kotlin.plugin.jpa") version "${kotlinVersion}"
     id("nu.studer.jooq") version "7.1.1"
+    id("groovy")
 }
 
 version = "0.1"
@@ -91,11 +92,22 @@ dependencies {
     //kapt("jakarta.persistence:jakarta.persistence-api:2.2")
     //implementation("io.micronaut.data:micronaut-data-hibernate-jpa:3.3.0")
     implementation("io.micronaut.sql:micronaut-jdbc-tomcat")
-    implementation('org.postgresql:postgresql:9.3-1100-jdbc4')
+    //implementation('org.postgresql:postgresql:9.3-1100-jdbc4')
+    implementation('org.postgresql:postgresql:42.5.0')
     //implementation("org.jooq:jooq:3.16.4")
+    implementation("io.micronaut.sql:micronaut-jooq")
 
     implementation("io.micronaut.reactor:micronaut-reactor")
     implementation("io.micronaut.security:micronaut-security-jwt")
+
+    testImplementation("org.spockframework:spock-core") {
+        exclude group: "org.codehouse.groovy", module: "groovy-all"
+    }
+    testImplementation("io.micronaut:micronaut-inject-groovy")
+    testImplementation("io.micronaut.test:micronaut-test-spock")
+    testImplementation('org.testcontainers:spock:1.17.5')
+    testImplementation("org.testcontainers:postgresql:1.17.5")
+    testImplementation("org.flywaydb:flyway-core:9.7.0")
 
     implementation("io.micronaut:micronaut-http-validation")
     implementation("io.micronaut:micronaut-http-client")
@@ -110,7 +122,6 @@ dependencies {
 
     runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
 }
-
 
 application {
     mainClass.set("com.note.ApplicationKt")
