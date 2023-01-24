@@ -8,6 +8,6 @@ RUN curl -s https://get.sdkman.io | bash
 RUN /bin/bash -c "source /root/.sdkman/bin/sdkman-init.sh; sdk version; sdk install micronaut 3.4.0"
 COPY . /backend
 WORKDIR backend
-RUN ./gradlew build
+#RUN ./gradlew build
 EXPOSE 8080
 CMD ./gradlew run

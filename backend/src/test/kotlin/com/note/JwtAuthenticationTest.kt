@@ -1,4 +1,4 @@
-package example.micronaut
+package com.note
 
 import com.nimbusds.jwt.JWTParser
 import com.nimbusds.jwt.SignedJWT

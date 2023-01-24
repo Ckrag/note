@@ -27,15 +27,9 @@ class NoteController(
         return HttpResponse.ok(this.noteRepo.getAll())
     }
 
-    @Get
+    @Get(value = "/{title}")
     fun getNoteByTitle(@QueryValue title: String): HttpResponse<List<NoteDto>> {
         return HttpResponse.ok(this.noteRepo.findByTitle(title).toList())
-    }
-
-    @Get(value = "/{id}")
-    fun getNoteByTitle(@PathVariable id: Long): Optional<NoteDto> {
-        //return this.noteRepo.findById(id) ?: Optional.empty<Note>()
-        return Optional.empty()
     }
 
     @Post

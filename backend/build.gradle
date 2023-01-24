@@ -80,12 +80,21 @@ repositories {
     mavenCentral()
 }
 
+configurations.configureEach {
+    resolutionStrategy.dependencySubstitution {
+        substitute(module("io.micronaut:micronaut-jackson-databind"))
+                .using(module("io.micronaut.serde:micronaut-serde-jackson:1.5.0"))
+    }
+}
 dependencies {
     kapt("io.micronaut.data:micronaut-data-processor:3.3.0")
 
     jooqGenerator("org.postgresql:postgresql:42.5.0")
 
-    implementation("org.springframework.security:spring-security-crypto:5.7.3")
+    //implementation("org.springframework.security:spring-security-crypto:5.7.3")
+    implementation("at.favre.lib:bcrypt:0.9.0")
+
+    implementation("io.micronaut.serde:micronaut-serde-jackson:1.5.0")
 
     // DB stuff
     // kapt("io.micronaut.liquibase:micronaut-liquibase")
@@ -107,7 +116,7 @@ dependencies {
     testImplementation("io.micronaut.test:micronaut-test-spock")
     testImplementation('org.testcontainers:spock:1.17.5')
     testImplementation("org.testcontainers:postgresql:1.17.5")
-    testImplementation("org.flywaydb:flyway-core:9.7.0")
+    testImplementation("org.flywaydb:flyway-core:9.12.0")
 
     implementation("io.micronaut:micronaut-http-validation")
     implementation("io.micronaut:micronaut-http-client")

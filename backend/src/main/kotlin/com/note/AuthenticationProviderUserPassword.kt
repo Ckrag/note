@@ -10,14 +10,22 @@ import reactor.core.publisher.Flux
 import reactor.core.publisher.FluxSink
 
 @Singleton
-class AuthenticationProviderUserPassword : AuthenticationProvider {
+class AuthenticationProviderUserPassword(
+    private val userRepo: UserRepository,
+    private val passwordRepository: PasswordRepository,
+    private val pwHasher: PasswordHasher
+) : AuthenticationProvider {
     // https://guides.micronaut.io/latest/micronaut-security-jwt-gradle-kotlin.html
     override fun authenticate(
         httpRequest: HttpRequest<*>?,
         authenticationRequest: AuthenticationRequest<*, *>
     ): Publisher<AuthenticationResponse> {
+        println("authenticating ${authenticationRequest.identity}")
+        val user = userRepo.getUserByUsername(authenticationRequest.identity.toString())
+        val password = passwordRepository.getUserPassword(user)
         return Flux.create({ emitter: FluxSink<AuthenticationResponse> ->
-            if (authenticationRequest.identity == "sherlock" && authenticationRequest.secret == "password") {
+            if (pwHasher.matches(authenticationRequest.secret.toString(), password)) {
+            //if (authenticationRequest.identity == "sherlock" && authenticationRequest.secret == "password") {
                 emitter.next(AuthenticationResponse.success(authenticationRequest.identity as String))
                 emitter.complete()
             } else {
