@@ -1,41 +1,43 @@
 package com.note
 
+import io.micronaut.http.HttpHeaders
 import io.micronaut.http.HttpResponse
+import io.micronaut.http.MediaType
 import io.micronaut.http.MediaType.TEXT_PLAIN
 import io.micronaut.http.annotation.*
 import io.micronaut.security.annotation.Secured
+import io.micronaut.security.authentication.Authentication
 import io.micronaut.security.rules.SecurityRule
 import io.micronaut.validation.Validated
-import jakarta.inject.Inject
+import jakarta.inject.Singleton
 import java.security.Principal
 import java.util.*
 import javax.validation.Valid
 
 @Validated
+@Singleton
 @Secured(SecurityRule.IS_AUTHENTICATED)
-@Controller("/note")
+@Controller("/org/{orgId}/note/")
 class NoteController(
-    private val noteRepo: NoteRepository
+    private val noteManagement: NoteManagementService
 ) {
 
-    @Produces(TEXT_PLAIN)
-    @Get
-    fun index(principal: Principal): String = principal.name
-
+    @Produces(MediaType.APPLICATION_JSON)
     @Get(value = "/all")
-    fun getNotes(): HttpResponse<List<NoteDto>> {
-        return HttpResponse.ok(this.noteRepo.getAll())
+    fun getNotes(authentication: Authentication): HttpResponse<List<NoteDto>> {
+        return HttpResponse.ok(this.noteManagement.getAllNotes(authentication))
     }
 
-    @Get(value = "/{title}")
-    fun getNoteByTitle(@QueryValue title: String): HttpResponse<List<NoteDto>> {
-        return HttpResponse.ok(this.noteRepo.findByTitle(title).toList())
+    @Produces(MediaType.APPLICATION_JSON)
+    @Post(value = "/find")
+    fun getNoteByTitle(@QueryValue title: String, authentication: Authentication): HttpResponse<List<NoteDto>> {
+        return HttpResponse.ok(this.noteManagement.findNotesByTitle(title, authentication).toList())
     }
 
-    @Post
-    fun createNote(@Body @Valid note: NoteDto): HttpResponse<NoteDto> {
-        //val saved = this.noteRepo.save(note)
-        //return HttpResponse.created(saved)
-        return HttpResponse.created(note)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Post(value = "/create")
+    fun createNote(@Body @Valid note: CreateNoteDto, authentication: Authentication, orgId: Int): HttpResponse<NoteDto> {
+        val saved = this.noteManagement.createNote(note, authentication, orgId)
+        return HttpResponse.created(saved)
     }
 }

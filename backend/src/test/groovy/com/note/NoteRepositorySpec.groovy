@@ -16,12 +16,12 @@ class NoteRepositorySpec extends RepoSpecification {
 
     void "testFindByTitle"() {
         when:
-        def matching = noteRepository.findByTitle("my-note")
+        def matching = noteRepository.findByTitleByUser("my-note")
         then:
         matching.size() == 1
 
         when:
-        def notMatching = noteRepository.findByTitle("fubar")
+        def notMatching = noteRepository.findByTitleByUser("fubar")
         then:
         notMatching.empty
     }

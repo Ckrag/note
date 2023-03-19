@@ -17,7 +17,7 @@ import org.jooq.ForeignKey;
 import org.jooq.Identity;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row5;
+import org.jooq.Row4;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -53,11 +53,6 @@ public class Users extends TableImpl<UsersRecord> {
      * The column <code>public.users.id</code>.
      */
     public final TableField<UsersRecord, Integer> ID = createField(DSL.name("id"), SQLDataType.INTEGER.nullable(false).identity(true), this, "");
-
-    /**
-     * The column <code>public.users.username</code>.
-     */
-    public final TableField<UsersRecord, String> USERNAME = createField(DSL.name("username"), SQLDataType.VARCHAR(100).nullable(false), this, "");
 
     /**
      * The column <code>public.users.email</code>.
@@ -124,7 +119,7 @@ public class Users extends TableImpl<UsersRecord> {
 
     @Override
     public List<UniqueKey<UsersRecord>> getUniqueKeys() {
-        return Arrays.asList(Keys.USERS_USERNAME_KEY, Keys.USERS_EMAIL_KEY);
+        return Arrays.asList(Keys.USERS_EMAIL_KEY);
     }
 
     @Override
@@ -154,11 +149,11 @@ public class Users extends TableImpl<UsersRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row5 type methods
+    // Row4 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row5<Integer, String, String, Boolean, LocalDateTime> fieldsRow() {
-        return (Row5) super.fieldsRow();
+    public Row4<Integer, String, Boolean, LocalDateTime> fieldsRow() {
+        return (Row4) super.fieldsRow();
     }
 }

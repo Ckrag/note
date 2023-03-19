@@ -10,6 +10,11 @@ import java.util.List;
 import jooq.tables.Auth;
 import jooq.tables.FlywaySchemaHistory;
 import jooq.tables.Note;
+import jooq.tables.NoteCategory;
+import jooq.tables.Organization;
+import jooq.tables.UserNoteOwnership;
+import jooq.tables.UserNotecategoryOwnership;
+import jooq.tables.UserOrganizationMembership;
 import jooq.tables.Users;
 
 import org.jooq.Catalog;
@@ -46,6 +51,31 @@ public class Public extends SchemaImpl {
     public final Note NOTE = Note.NOTE;
 
     /**
+     * The table <code>public.note_category</code>.
+     */
+    public final NoteCategory NOTE_CATEGORY = NoteCategory.NOTE_CATEGORY;
+
+    /**
+     * The table <code>public.organization</code>.
+     */
+    public final Organization ORGANIZATION = Organization.ORGANIZATION;
+
+    /**
+     * The table <code>public.user_note_ownership</code>.
+     */
+    public final UserNoteOwnership USER_NOTE_OWNERSHIP = UserNoteOwnership.USER_NOTE_OWNERSHIP;
+
+    /**
+     * The table <code>public.user_notecategory_ownership</code>.
+     */
+    public final UserNotecategoryOwnership USER_NOTECATEGORY_OWNERSHIP = UserNotecategoryOwnership.USER_NOTECATEGORY_OWNERSHIP;
+
+    /**
+     * The table <code>public.user_organization_membership</code>.
+     */
+    public final UserOrganizationMembership USER_ORGANIZATION_MEMBERSHIP = UserOrganizationMembership.USER_ORGANIZATION_MEMBERSHIP;
+
+    /**
      * The table <code>public.users</code>.
      */
     public final Users USERS = Users.USERS;
@@ -69,6 +99,11 @@ public class Public extends SchemaImpl {
             Auth.AUTH,
             FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY,
             Note.NOTE,
+            NoteCategory.NOTE_CATEGORY,
+            Organization.ORGANIZATION,
+            UserNoteOwnership.USER_NOTE_OWNERSHIP,
+            UserNotecategoryOwnership.USER_NOTECATEGORY_OWNERSHIP,
+            UserOrganizationMembership.USER_ORGANIZATION_MEMBERSHIP,
             Users.USERS
         );
     }

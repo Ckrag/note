@@ -5,7 +5,6 @@ import io.micronaut.serde.annotation.Serdeable
 
 @Serdeable
 data class CreateUserDto(
-    val username: String,
     val email: String,
     @JsonProperty("raw_password") val rawPassword: String,
 )

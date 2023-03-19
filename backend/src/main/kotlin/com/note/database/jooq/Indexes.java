@@ -5,6 +5,9 @@ package jooq;
 
 
 import jooq.tables.FlywaySchemaHistory;
+import jooq.tables.Organization;
+import jooq.tables.UserNoteOwnership;
+import jooq.tables.UserOrganizationMembership;
 
 import org.jooq.Index;
 import org.jooq.OrderField;
@@ -23,4 +26,11 @@ public class Indexes {
     // -------------------------------------------------------------------------
 
     public static final Index FLYWAY_SCHEMA_HISTORY_S_IDX = Internal.createIndex(DSL.name("flyway_schema_history_s_idx"), FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY, new OrderField[] { FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY.SUCCESS }, false);
+    public static final Index ORGANIZATION_NAME = Internal.createIndex(DSL.name("organization_name"), Organization.ORGANIZATION, new OrderField[] { Organization.ORGANIZATION.NAME }, false);
+    public static final Index USER_NOTE_OWNERSHIP_ACCESS = Internal.createIndex(DSL.name("user_note_ownership_access"), UserNoteOwnership.USER_NOTE_OWNERSHIP, new OrderField[] { UserNoteOwnership.USER_NOTE_OWNERSHIP.NOTE_ACCESS }, false);
+    public static final Index USER_NOTE_OWNERSHIP_NOTE_ID = Internal.createIndex(DSL.name("user_note_ownership_note_id"), UserNoteOwnership.USER_NOTE_OWNERSHIP, new OrderField[] { UserNoteOwnership.USER_NOTE_OWNERSHIP.NOTE_ID }, false);
+    public static final Index USER_NOTE_OWNERSHIP_USER_ID = Internal.createIndex(DSL.name("user_note_ownership_user_id"), UserNoteOwnership.USER_NOTE_OWNERSHIP, new OrderField[] { UserNoteOwnership.USER_NOTE_OWNERSHIP.USER_ID }, false);
+    public static final Index USER_ORGANIZATION_MEMBERSHIP_ORGANIZATION_ID = Internal.createIndex(DSL.name("user_organization_membership_organization_id"), UserOrganizationMembership.USER_ORGANIZATION_MEMBERSHIP, new OrderField[] { UserOrganizationMembership.USER_ORGANIZATION_MEMBERSHIP.ORGANIZATION_ID }, false);
+    public static final Index USER_ORGANIZATION_MEMBERSHIP_ROLE = Internal.createIndex(DSL.name("user_organization_membership_role"), UserOrganizationMembership.USER_ORGANIZATION_MEMBERSHIP, new OrderField[] { UserOrganizationMembership.USER_ORGANIZATION_MEMBERSHIP.ROLE }, false);
+    public static final Index USER_ORGANIZATION_MEMBERSHIP_USER_ID = Internal.createIndex(DSL.name("user_organization_membership_user_id"), UserOrganizationMembership.USER_ORGANIZATION_MEMBERSHIP, new OrderField[] { UserOrganizationMembership.USER_ORGANIZATION_MEMBERSHIP.USER_ID }, false);
 }

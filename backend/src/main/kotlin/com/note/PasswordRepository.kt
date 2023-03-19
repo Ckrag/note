@@ -15,7 +15,7 @@ class PasswordRepository(
             .values(user.id, password)
             .execute()
         if (numOfInsertedRows != 1) {
-            throw DatabaseException("Failed to insert user ${user.username}, ${user.email}. $numOfInsertedRows rows created.")
+            throw DatabaseException("Failed to insert user ${user.email}. $numOfInsertedRows rows created.")
         }
     }
 

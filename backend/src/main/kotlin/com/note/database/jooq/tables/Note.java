@@ -65,11 +65,6 @@ public class Note extends TableImpl<NoteRecord> {
     public final TableField<NoteRecord, String> CONTENT = createField(DSL.name("content"), SQLDataType.VARCHAR.nullable(false), this, "");
 
     /**
-     * The column <code>public.note.verified</code>.
-     */
-    public final TableField<NoteRecord, Boolean> VERIFIED = createField(DSL.name("verified"), SQLDataType.BOOLEAN.defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
-
-    /**
      * The column <code>public.note.created</code>.
      */
     public final TableField<NoteRecord, LocalDateTime> CREATED = createField(DSL.name("created"), SQLDataType.LOCALDATETIME(6).nullable(false).defaultValue(DSL.field("CURRENT_TIMESTAMP", SQLDataType.LOCALDATETIME)), this, "");
@@ -77,7 +72,12 @@ public class Note extends TableImpl<NoteRecord> {
     /**
      * The column <code>public.note.author_id</code>.
      */
-    public final TableField<NoteRecord, Integer> AUTHOR_ID = createField(DSL.name("author_id"), SQLDataType.INTEGER.nullable(false).identity(true), this, "");
+    public final TableField<NoteRecord, Integer> AUTHOR_ID = createField(DSL.name("author_id"), SQLDataType.INTEGER, this, "");
+
+    /**
+     * The column <code>public.note.note_category</code>.
+     */
+    public final TableField<NoteRecord, Integer> NOTE_CATEGORY = createField(DSL.name("note_category"), SQLDataType.INTEGER, this, "");
 
     private Note(Name alias, Table<NoteRecord> aliased) {
         this(alias, aliased, null);
@@ -129,10 +129,11 @@ public class Note extends TableImpl<NoteRecord> {
 
     @Override
     public List<ForeignKey<NoteRecord, ?>> getReferences() {
-        return Arrays.asList(Keys.NOTE__NOTE_AUTHOR_ID_FKEY);
+        return Arrays.asList(Keys.NOTE__NOTE_AUTHOR_ID_FKEY, Keys.NOTE__NOTE_NOTE_CATEGORY_FKEY);
     }
 
     private transient Users _users;
+    private transient NoteCategory _noteCategory;
 
     /**
      * Get the implicit join path to the <code>public.users</code> table.
@@ -142,6 +143,17 @@ public class Note extends TableImpl<NoteRecord> {
             _users = new Users(this, Keys.NOTE__NOTE_AUTHOR_ID_FKEY);
 
         return _users;
+    }
+
+    /**
+     * Get the implicit join path to the <code>public.note_category</code>
+     * table.
+     */
+    public NoteCategory noteCategory() {
+        if (_noteCategory == null)
+            _noteCategory = new NoteCategory(this, Keys.NOTE__NOTE_NOTE_CATEGORY_FKEY);
+
+        return _noteCategory;
     }
 
     @Override
@@ -175,7 +187,7 @@ public class Note extends TableImpl<NoteRecord> {
     // -------------------------------------------------------------------------
 
     @Override
-    public Row6<Integer, String, String, Boolean, LocalDateTime, Integer> fieldsRow() {
+    public Row6<Integer, String, String, LocalDateTime, Integer, Integer> fieldsRow() {
         return (Row6) super.fieldsRow();
     }
 }

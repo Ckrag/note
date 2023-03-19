@@ -6,25 +6,24 @@ import jooq.Tables
 import jooq.tables.Users
 import org.jooq.DSLContext
 
-@Bean
 @Singleton
 class UserRepository (
     private val dslCtx: DSLContext
 ) {
     fun createUser(createdUser: CreateUserDto): User {
-        val numOfInsertedRows = dslCtx.insertInto(Tables.USERS, Users.USERS.USERNAME, Users.USERS.EMAIL)
-            .values(createdUser.username, createdUser.email)
+        val numOfInsertedRows = dslCtx.insertInto(Tables.USERS, Users.USERS.EMAIL)
+            .values(createdUser.email)
             .execute()
         if (numOfInsertedRows != 1) {
-            throw DatabaseException("Failed to insert user ${createdUser.username}, ${createdUser.email}. $numOfInsertedRows rows created.")
+            throw DatabaseException("Failed to insert user ${createdUser.email}, ${createdUser.email}. $numOfInsertedRows rows created.")
         }
-        return getUserByUsername(createdUser.username)
+        return getUserByEmail(createdUser.email)
     }
 
-    fun getUserByUsername(username: String): User {
+    fun getUserByEmail(email: String): User {
         return this.dslCtx
-            .select(Users.USERS.ID, Users.USERS.USERNAME, Users.USERS.EMAIL).from(Users.USERS)
-            .where(Users.USERS.USERNAME.eq(username))
-            .fetchOneInto(User::class.java) ?: throw NotFoundException("Username $username not found")
+            .select(Users.USERS.ID, Users.USERS.EMAIL).from(Users.USERS)
+            .where(Users.USERS.EMAIL.eq(email))
+            .fetchOneInto(User::class.java) ?: throw NotFoundException("Username $email not found")
     }
 }

@@ -7,10 +7,20 @@ package jooq;
 import jooq.tables.Auth;
 import jooq.tables.FlywaySchemaHistory;
 import jooq.tables.Note;
+import jooq.tables.NoteCategory;
+import jooq.tables.Organization;
+import jooq.tables.UserNoteOwnership;
+import jooq.tables.UserNotecategoryOwnership;
+import jooq.tables.UserOrganizationMembership;
 import jooq.tables.Users;
 import jooq.tables.records.AuthRecord;
 import jooq.tables.records.FlywaySchemaHistoryRecord;
+import jooq.tables.records.NoteCategoryRecord;
 import jooq.tables.records.NoteRecord;
+import jooq.tables.records.OrganizationRecord;
+import jooq.tables.records.UserNoteOwnershipRecord;
+import jooq.tables.records.UserNotecategoryOwnershipRecord;
+import jooq.tables.records.UserOrganizationMembershipRecord;
 import jooq.tables.records.UsersRecord;
 
 import org.jooq.ForeignKey;
@@ -34,9 +44,16 @@ public class Keys {
     public static final UniqueKey<AuthRecord> AUTH_PKEY = Internal.createUniqueKey(Auth.AUTH, DSL.name("auth_pkey"), new TableField[] { Auth.AUTH.ID }, true);
     public static final UniqueKey<FlywaySchemaHistoryRecord> FLYWAY_SCHEMA_HISTORY_PK = Internal.createUniqueKey(FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY, DSL.name("flyway_schema_history_pk"), new TableField[] { FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY.INSTALLED_RANK }, true);
     public static final UniqueKey<NoteRecord> NOTE_PKEY = Internal.createUniqueKey(Note.NOTE, DSL.name("note_pkey"), new TableField[] { Note.NOTE.ID }, true);
+    public static final UniqueKey<NoteCategoryRecord> NOTE_CATEGORY_PKEY = Internal.createUniqueKey(NoteCategory.NOTE_CATEGORY, DSL.name("note_category_pkey"), new TableField[] { NoteCategory.NOTE_CATEGORY.ID }, true);
+    public static final UniqueKey<OrganizationRecord> ORGANIZATION_PKEY = Internal.createUniqueKey(Organization.ORGANIZATION, DSL.name("organization_pkey"), new TableField[] { Organization.ORGANIZATION.ID }, true);
+    public static final UniqueKey<UserNoteOwnershipRecord> USER_NOTE_OWNERSHIP_PKEY = Internal.createUniqueKey(UserNoteOwnership.USER_NOTE_OWNERSHIP, DSL.name("user_note_ownership_pkey"), new TableField[] { UserNoteOwnership.USER_NOTE_OWNERSHIP.ID }, true);
+    public static final UniqueKey<UserNoteOwnershipRecord> USER_NOTE_OWNERSHIP_USER_ID_NOTE_ID_KEY = Internal.createUniqueKey(UserNoteOwnership.USER_NOTE_OWNERSHIP, DSL.name("user_note_ownership_user_id_note_id_key"), new TableField[] { UserNoteOwnership.USER_NOTE_OWNERSHIP.USER_ID, UserNoteOwnership.USER_NOTE_OWNERSHIP.NOTE_ID }, true);
+    public static final UniqueKey<UserNotecategoryOwnershipRecord> USER_NOTECATEGORY_OWNERSHIP_PKEY = Internal.createUniqueKey(UserNotecategoryOwnership.USER_NOTECATEGORY_OWNERSHIP, DSL.name("user_notecategory_ownership_pkey"), new TableField[] { UserNotecategoryOwnership.USER_NOTECATEGORY_OWNERSHIP.ID }, true);
+    public static final UniqueKey<UserNotecategoryOwnershipRecord> USER_NOTECATEGORY_OWNERSHIP_USER_ID_CATEGORY_ID_KEY = Internal.createUniqueKey(UserNotecategoryOwnership.USER_NOTECATEGORY_OWNERSHIP, DSL.name("user_notecategory_ownership_user_id_category_id_key"), new TableField[] { UserNotecategoryOwnership.USER_NOTECATEGORY_OWNERSHIP.USER_ID, UserNotecategoryOwnership.USER_NOTECATEGORY_OWNERSHIP.CATEGORY_ID }, true);
+    public static final UniqueKey<UserOrganizationMembershipRecord> USER_ORGANIZATION_MEMBERSHIP_PKEY = Internal.createUniqueKey(UserOrganizationMembership.USER_ORGANIZATION_MEMBERSHIP, DSL.name("user_organization_membership_pkey"), new TableField[] { UserOrganizationMembership.USER_ORGANIZATION_MEMBERSHIP.ID }, true);
+    public static final UniqueKey<UserOrganizationMembershipRecord> USER_ORGANIZATION_MEMBERSHIP_USER_ID_ORGANIZATION_ID_ROLE_KEY = Internal.createUniqueKey(UserOrganizationMembership.USER_ORGANIZATION_MEMBERSHIP, DSL.name("user_organization_membership_user_id_organization_id_role_key"), new TableField[] { UserOrganizationMembership.USER_ORGANIZATION_MEMBERSHIP.USER_ID, UserOrganizationMembership.USER_ORGANIZATION_MEMBERSHIP.ORGANIZATION_ID, UserOrganizationMembership.USER_ORGANIZATION_MEMBERSHIP.ROLE }, true);
     public static final UniqueKey<UsersRecord> USERS_EMAIL_KEY = Internal.createUniqueKey(Users.USERS, DSL.name("users_email_key"), new TableField[] { Users.USERS.EMAIL }, true);
     public static final UniqueKey<UsersRecord> USERS_PKEY = Internal.createUniqueKey(Users.USERS, DSL.name("users_pkey"), new TableField[] { Users.USERS.ID }, true);
-    public static final UniqueKey<UsersRecord> USERS_USERNAME_KEY = Internal.createUniqueKey(Users.USERS, DSL.name("users_username_key"), new TableField[] { Users.USERS.USERNAME }, true);
 
     // -------------------------------------------------------------------------
     // FOREIGN KEY definitions
@@ -44,4 +61,13 @@ public class Keys {
 
     public static final ForeignKey<AuthRecord, UsersRecord> AUTH__AUTH_ID_FKEY = Internal.createForeignKey(Auth.AUTH, DSL.name("auth_id_fkey"), new TableField[] { Auth.AUTH.ID }, Keys.USERS_PKEY, new TableField[] { Users.USERS.ID }, true);
     public static final ForeignKey<NoteRecord, UsersRecord> NOTE__NOTE_AUTHOR_ID_FKEY = Internal.createForeignKey(Note.NOTE, DSL.name("note_author_id_fkey"), new TableField[] { Note.NOTE.AUTHOR_ID }, Keys.USERS_PKEY, new TableField[] { Users.USERS.ID }, true);
+    public static final ForeignKey<NoteRecord, NoteCategoryRecord> NOTE__NOTE_NOTE_CATEGORY_FKEY = Internal.createForeignKey(Note.NOTE, DSL.name("note_note_category_fkey"), new TableField[] { Note.NOTE.NOTE_CATEGORY }, Keys.NOTE_CATEGORY_PKEY, new TableField[] { NoteCategory.NOTE_CATEGORY.ID }, true);
+    public static final ForeignKey<UserNoteOwnershipRecord, NoteRecord> USER_NOTE_OWNERSHIP__USER_NOTE_OWNERSHIP_NOTE_ID_FKEY = Internal.createForeignKey(UserNoteOwnership.USER_NOTE_OWNERSHIP, DSL.name("user_note_ownership_note_id_fkey"), new TableField[] { UserNoteOwnership.USER_NOTE_OWNERSHIP.NOTE_ID }, Keys.NOTE_PKEY, new TableField[] { Note.NOTE.ID }, true);
+    public static final ForeignKey<UserNoteOwnershipRecord, OrganizationRecord> USER_NOTE_OWNERSHIP__USER_NOTE_OWNERSHIP_ORGANIZATION_ID_FKEY = Internal.createForeignKey(UserNoteOwnership.USER_NOTE_OWNERSHIP, DSL.name("user_note_ownership_organization_id_fkey"), new TableField[] { UserNoteOwnership.USER_NOTE_OWNERSHIP.ORGANIZATION_ID }, Keys.ORGANIZATION_PKEY, new TableField[] { Organization.ORGANIZATION.ID }, true);
+    public static final ForeignKey<UserNoteOwnershipRecord, UsersRecord> USER_NOTE_OWNERSHIP__USER_NOTE_OWNERSHIP_USER_ID_FKEY = Internal.createForeignKey(UserNoteOwnership.USER_NOTE_OWNERSHIP, DSL.name("user_note_ownership_user_id_fkey"), new TableField[] { UserNoteOwnership.USER_NOTE_OWNERSHIP.USER_ID }, Keys.USERS_PKEY, new TableField[] { Users.USERS.ID }, true);
+    public static final ForeignKey<UserNotecategoryOwnershipRecord, NoteCategoryRecord> USER_NOTECATEGORY_OWNERSHIP__USER_NOTECATEGORY_OWNERSHIP_CATEGORY_ID_FKEY = Internal.createForeignKey(UserNotecategoryOwnership.USER_NOTECATEGORY_OWNERSHIP, DSL.name("user_notecategory_ownership_category_id_fkey"), new TableField[] { UserNotecategoryOwnership.USER_NOTECATEGORY_OWNERSHIP.CATEGORY_ID }, Keys.NOTE_CATEGORY_PKEY, new TableField[] { NoteCategory.NOTE_CATEGORY.ID }, true);
+    public static final ForeignKey<UserNotecategoryOwnershipRecord, OrganizationRecord> USER_NOTECATEGORY_OWNERSHIP__USER_NOTECATEGORY_OWNERSHIP_ORGANIZATION_ID_FKEY = Internal.createForeignKey(UserNotecategoryOwnership.USER_NOTECATEGORY_OWNERSHIP, DSL.name("user_notecategory_ownership_organization_id_fkey"), new TableField[] { UserNotecategoryOwnership.USER_NOTECATEGORY_OWNERSHIP.ORGANIZATION_ID }, Keys.ORGANIZATION_PKEY, new TableField[] { Organization.ORGANIZATION.ID }, true);
+    public static final ForeignKey<UserNotecategoryOwnershipRecord, UsersRecord> USER_NOTECATEGORY_OWNERSHIP__USER_NOTECATEGORY_OWNERSHIP_USER_ID_FKEY = Internal.createForeignKey(UserNotecategoryOwnership.USER_NOTECATEGORY_OWNERSHIP, DSL.name("user_notecategory_ownership_user_id_fkey"), new TableField[] { UserNotecategoryOwnership.USER_NOTECATEGORY_OWNERSHIP.USER_ID }, Keys.USERS_PKEY, new TableField[] { Users.USERS.ID }, true);
+    public static final ForeignKey<UserOrganizationMembershipRecord, OrganizationRecord> USER_ORGANIZATION_MEMBERSHIP__USER_ORGANIZATION_MEMBERSHIP_ORGANIZATION_ID_FKEY = Internal.createForeignKey(UserOrganizationMembership.USER_ORGANIZATION_MEMBERSHIP, DSL.name("user_organization_membership_organization_id_fkey"), new TableField[] { UserOrganizationMembership.USER_ORGANIZATION_MEMBERSHIP.ORGANIZATION_ID }, Keys.ORGANIZATION_PKEY, new TableField[] { Organization.ORGANIZATION.ID }, true);
+    public static final ForeignKey<UserOrganizationMembershipRecord, UsersRecord> USER_ORGANIZATION_MEMBERSHIP__USER_ORGANIZATION_MEMBERSHIP_USER_ID_FKEY = Internal.createForeignKey(UserOrganizationMembership.USER_ORGANIZATION_MEMBERSHIP, DSL.name("user_organization_membership_user_id_fkey"), new TableField[] { UserOrganizationMembership.USER_ORGANIZATION_MEMBERSHIP.USER_ID }, Keys.USERS_PKEY, new TableField[] { Users.USERS.ID }, true);
 }

@@ -7,6 +7,11 @@ package jooq;
 import jooq.tables.Auth;
 import jooq.tables.FlywaySchemaHistory;
 import jooq.tables.Note;
+import jooq.tables.NoteCategory;
+import jooq.tables.Organization;
+import jooq.tables.UserNoteOwnership;
+import jooq.tables.UserNotecategoryOwnership;
+import jooq.tables.UserOrganizationMembership;
 import jooq.tables.Users;
 
 
@@ -30,6 +35,31 @@ public class Tables {
      * The table <code>public.note</code>.
      */
     public static final Note NOTE = Note.NOTE;
+
+    /**
+     * The table <code>public.note_category</code>.
+     */
+    public static final NoteCategory NOTE_CATEGORY = NoteCategory.NOTE_CATEGORY;
+
+    /**
+     * The table <code>public.organization</code>.
+     */
+    public static final Organization ORGANIZATION = Organization.ORGANIZATION;
+
+    /**
+     * The table <code>public.user_note_ownership</code>.
+     */
+    public static final UserNoteOwnership USER_NOTE_OWNERSHIP = UserNoteOwnership.USER_NOTE_OWNERSHIP;
+
+    /**
+     * The table <code>public.user_notecategory_ownership</code>.
+     */
+    public static final UserNotecategoryOwnership USER_NOTECATEGORY_OWNERSHIP = UserNotecategoryOwnership.USER_NOTECATEGORY_OWNERSHIP;
+
+    /**
+     * The table <code>public.user_organization_membership</code>.
+     */
+    public static final UserOrganizationMembership USER_ORGANIZATION_MEMBERSHIP = UserOrganizationMembership.USER_ORGANIZATION_MEMBERSHIP;
 
     /**
      * The table <code>public.users</code>.

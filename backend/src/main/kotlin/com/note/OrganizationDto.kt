@@ -3,7 +3,7 @@ package com.note
 import io.micronaut.serde.annotation.Serdeable
 
 @Serdeable
-data class UserDto(
+data class OrganizationDto(
     val id: Int,
-    val email: String,
+    val name: String,
 )

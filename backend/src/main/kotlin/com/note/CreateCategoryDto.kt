@@ -1,7 +1,6 @@
 package com.note
 
-class Category(
-    var id: Long,
+class CreateCategoryDto(
     var title: String,
     var description: String?
 )
