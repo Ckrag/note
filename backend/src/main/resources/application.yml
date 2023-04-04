@@ -3,8 +3,15 @@ micronaut:
     name: backend
   server:
     port: 8080
-    cors:
+    cors: #https://docs.micronaut.io/1.2.5/guide/index.html#cors
       enabled: true
+      configurations:
+        dev:
+          allowedOrigins:
+            - http://localhost:5173
+        prod:
+          allowedOrigins:
+            - ${CORS_ORIGIN:fubar}
   security:
     authentication: bearer
     token:
@@ -24,15 +31,15 @@ datasources:
     password: ${JDBC_PASSWORD:postgres}
     dialect: POSTGRES
     driverClassName: ${JDBC_DRIVER:org.postgresql.Driver}
-jpa:
-  default:
-    entity-scan:
-      packages: 'com.note'
-    properties:
-      hibernate:
-        hbm2ddl:
-          auto: update
-        show_sql: true
+#jpa:
+#  default:
+#    entity-scan:
+#      packages: 'com.note'
+#    properties:
+#      hibernate:
+#        hbm2ddl:
+#          auto: update
+#        show_sql: true
 
 
 

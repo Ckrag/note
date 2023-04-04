@@ -69,12 +69,14 @@ repositories {
     mavenCentral()
 }
 
+
 configurations.configureEach {
     resolutionStrategy.dependencySubstitution {
         substitute(module("io.micronaut:micronaut-jackson-databind"))
                 .using(module("io.micronaut.serde:micronaut-serde-jackson:1.5.0"))
     }
 }
+
 dependencies {
     kapt("io.micronaut.data:micronaut-data-processor:3.3.0")
 
@@ -84,6 +86,9 @@ dependencies {
     implementation("at.favre.lib:bcrypt:0.9.0")
 
     implementation("io.micronaut.serde:micronaut-serde-jackson:1.5.0")
+    implementation("io.micronaut:micronaut-jackson-databind")
+    runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
+    kapt("io.micronaut.serde:micronaut-serde-processor")
 
     // DB stuff
     // kapt("io.micronaut.liquibase:micronaut-liquibase")
@@ -109,7 +114,6 @@ dependencies {
 
     implementation("io.micronaut:micronaut-http-validation")
     implementation("io.micronaut:micronaut-http-client")
-    implementation("io.micronaut:micronaut-jackson-databind")
     implementation("io.micronaut:micronaut-runtime")
     implementation("io.micronaut.kotlin:micronaut-kotlin-runtime")
     implementation("jakarta.annotation:jakarta.annotation-api")
@@ -117,8 +121,6 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
     runtimeOnly("ch.qos.logback:logback-classic")
     implementation("io.micronaut:micronaut-validation")
-
-    runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
 }
 
 application {

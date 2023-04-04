@@ -72,12 +72,12 @@ public class Note extends TableImpl<NoteRecord> {
     /**
      * The column <code>public.note.author_id</code>.
      */
-    public final TableField<NoteRecord, Integer> AUTHOR_ID = createField(DSL.name("author_id"), SQLDataType.INTEGER, this, "");
+    public final TableField<NoteRecord, Integer> AUTHOR_ID = createField(DSL.name("author_id"), SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
-     * The column <code>public.note.note_category</code>.
+     * The column <code>public.note.category_id</code>.
      */
-    public final TableField<NoteRecord, Integer> NOTE_CATEGORY = createField(DSL.name("note_category"), SQLDataType.INTEGER, this, "");
+    public final TableField<NoteRecord, Integer> CATEGORY_ID = createField(DSL.name("category_id"), SQLDataType.INTEGER.nullable(false), this, "");
 
     private Note(Name alias, Table<NoteRecord> aliased) {
         this(alias, aliased, null);
@@ -129,7 +129,7 @@ public class Note extends TableImpl<NoteRecord> {
 
     @Override
     public List<ForeignKey<NoteRecord, ?>> getReferences() {
-        return Arrays.asList(Keys.NOTE__NOTE_AUTHOR_ID_FKEY, Keys.NOTE__NOTE_NOTE_CATEGORY_FKEY);
+        return Arrays.asList(Keys.NOTE__NOTE_AUTHOR_ID_FKEY, Keys.NOTE__NOTE_CATEGORY_ID_FKEY);
     }
 
     private transient Users _users;
@@ -151,7 +151,7 @@ public class Note extends TableImpl<NoteRecord> {
      */
     public NoteCategory noteCategory() {
         if (_noteCategory == null)
-            _noteCategory = new NoteCategory(this, Keys.NOTE__NOTE_NOTE_CATEGORY_FKEY);
+            _noteCategory = new NoteCategory(this, Keys.NOTE__NOTE_CATEGORY_ID_FKEY);
 
         return _noteCategory;
     }

@@ -5,10 +5,11 @@ import jakarta.inject.Singleton
 import jooq.enums.OrganizationRole
 
 @Singleton
-class NoteManagementService(
+class NoteService(
     private val noteRepo: NoteRepository,
     private val userRepo: UserRepository,
-    private val orgMembershipRepo: OrganizationMembershipRepository
+    private val orgMembershipRepo: OrganizationMembershipRepository,
+    private val categoryRepository: CategoryRepository
 ) {
 
     fun createNote(note: CreateNoteDto, authentication: Authentication, orgId: Int): NoteDto {
@@ -17,13 +18,10 @@ class NoteManagementService(
         return noteRepo.createNote(note, user, org)
     }
 
-    fun findNotesByTitle(title: String, authentication: Authentication): List<NoteDto> {
+    fun findNotesByCategory(authentication: Authentication, orgId: Int, categoryId: Int): List<NoteDto> {
         val user = userRepo.getUserByEmail(authentication.name)
-        return noteRepo.findByTitleByUser(title, user)
-    }
-
-    fun getAllNotes(authentication: Authentication): List<NoteDto> {
-        val user = userRepo.getUserByEmail(authentication.name)
-        return noteRepo.getAllReadableByUser(user)
+        val org = orgMembershipRepo.getOrganization(user, orgId, OrganizationRole.USER)
+        val category = categoryRepository.getCategoryById(user, org, categoryId)
+        return noteRepo.getAllNotesForCategory(user, org, category)
     }
 }

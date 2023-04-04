@@ -99,17 +99,17 @@ public class NoteRecord extends UpdatableRecordImpl<NoteRecord> implements Recor
     }
 
     /**
-     * Setter for <code>public.note.note_category</code>.
+     * Setter for <code>public.note.category_id</code>.
      */
-    public NoteRecord setNoteCategory(Integer value) {
+    public NoteRecord setCategoryId(Integer value) {
         set(5, value);
         return this;
     }
 
     /**
-     * Getter for <code>public.note.note_category</code>.
+     * Getter for <code>public.note.category_id</code>.
      */
-    public Integer getNoteCategory() {
+    public Integer getCategoryId() {
         return (Integer) get(5);
     }
 
@@ -163,7 +163,7 @@ public class NoteRecord extends UpdatableRecordImpl<NoteRecord> implements Recor
 
     @Override
     public Field<Integer> field6() {
-        return Note.NOTE.NOTE_CATEGORY;
+        return Note.NOTE.CATEGORY_ID;
     }
 
     @Override
@@ -193,7 +193,7 @@ public class NoteRecord extends UpdatableRecordImpl<NoteRecord> implements Recor
 
     @Override
     public Integer component6() {
-        return getNoteCategory();
+        return getCategoryId();
     }
 
     @Override
@@ -223,7 +223,7 @@ public class NoteRecord extends UpdatableRecordImpl<NoteRecord> implements Recor
 
     @Override
     public Integer value6() {
-        return getNoteCategory();
+        return getCategoryId();
     }
 
     @Override
@@ -258,7 +258,7 @@ public class NoteRecord extends UpdatableRecordImpl<NoteRecord> implements Recor
 
     @Override
     public NoteRecord value6(Integer value) {
-        setNoteCategory(value);
+        setCategoryId(value);
         return this;
     }
 
@@ -287,7 +287,7 @@ public class NoteRecord extends UpdatableRecordImpl<NoteRecord> implements Recor
     /**
      * Create a detached, initialised NoteRecord
      */
-    public NoteRecord(Integer id, String title, String content, LocalDateTime created, Integer authorId, Integer noteCategory) {
+    public NoteRecord(Integer id, String title, String content, LocalDateTime created, Integer authorId, Integer categoryId) {
         super(Note.NOTE);
 
         setId(id);
@@ -295,6 +295,6 @@ public class NoteRecord extends UpdatableRecordImpl<NoteRecord> implements Recor
         setContent(content);
         setCreated(created);
         setAuthorId(authorId);
-        setNoteCategory(noteCategory);
+        setCategoryId(categoryId);
     }
 }

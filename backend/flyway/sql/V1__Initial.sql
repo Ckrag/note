@@ -23,8 +23,8 @@ CREATE TABLE IF NOT EXISTS note (
     title VARCHAR(200) NOT NULL,
     content VARCHAR NOT NULL,
     created TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    author_id INTEGER REFERENCES users (id),
-    note_category INTEGER REFERENCES note_category (id)
+    author_id INTEGER REFERENCES users (id) NOT NULL,
+    category_id INTEGER REFERENCES note_category (id) NOT NULL
 );
 CREATE TYPE note_access AS ENUM ('WRITE', 'READ');
 
