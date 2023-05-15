@@ -13,18 +13,18 @@
     let selectedCategoryId
     let newNoteText
     let newNoteTitle
-    const loadCategories = (accessToken, orgId) => {
+    const loadCategories = async (accessToken, orgId) => {
         const api = new Api()
-        let categories = api.getCategories(accessToken, orgId)
-        categories.then((data) => {
-            selectableCategories = data.categories.map((category) => {
-                return {
-                    id: category.id,
-                    text: category.title
-                }
-            })
-            selectedCategoryId = selectableCategories[0].id
+        let {categories} = await api.getCategories(accessToken, orgId)
+
+        selectableCategories = categories?.map((category) => {
+            return {
+                id: category.id,
+                text: category.title
+            }
         })
+        selectedCategoryId = selectableCategories[0].id
+
     }
 
     const createNote = () => {
@@ -46,10 +46,12 @@
     <h3>Create new note</h3>
     <Dropdown
             titleText="Select a category"
-            on:select={(item) => {selectedCategoryId = item.detail.selectedId}}
+            label="- select a category -"
+            on:select={(item) => {selectedCategoryId = item?.detail?.selectedId}}
             items={selectableCategories}
     />
     <TextInput bind:value={newNoteTitle} placeholder="Write a title"/>
     <TextArea bind:value={newNoteText} placeholder="Write a note"/>
     <Button on:click={() => createNote()}>Create Note</Button>
+
 </div>

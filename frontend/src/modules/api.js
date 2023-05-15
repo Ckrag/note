@@ -18,7 +18,7 @@ export class Api {
         if (body !== null) {
             config.body = JSON.stringify(body)
         }
-        return fetch(`http://0.0.0.0:8080${route}`, config)
+        return fetch(`http://localhost:8080${route}`, config)
     }
 
     async login(email, password) {

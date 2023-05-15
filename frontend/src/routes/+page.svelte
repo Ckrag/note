@@ -1,3 +1,11 @@
+
+<head>
+    <style>
+        html, body {
+            height: 100%;
+        }
+    </style>
+</head>
 <script>
     import Login from '../components/login.svelte';
     import CreateUser from '../components/create_user.svelte'
@@ -96,25 +104,30 @@
 
     // https://carbon-components-svelte.onrender.com/components/
 </script>
+<div class="container">
 
-<div style="margin-bottom: 20px;">
-    {#if auth && auth.isLoggedIn()}
-        <Button on:click={() => logout()}>Logout</Button>
-        <p>Username: {auth.getEmail()}</p>
-    {:else}
-        <Login/>
-        <CreateUser/>
-    {/if}
-</div>
+<header>
+    <div style="margin-bottom: 20px;">
+        {#if auth && auth.isLoggedIn()}
+            <Button on:click={() => logout()}>Logout</Button>
+            <p>Username: {auth.getEmail()}</p>
+        {:else}
+            <Login/>
+            <CreateUser/>
+        {/if}
+    </div>
+</header>
 
 {#if auth && auth.isLoggedIn()}
+    <aside class="sidebar">
+        {#each Object.entries(categoriesMapped) as [_, category]}
+            <Button class="category-btn" on:click={() => showCategory(category.id)}>{category.title}</Button>
+        {/each}
+    </aside>
+    <main>
     <div>
         <Grid fullWidth>
-            <Row>
-                {#each Object.entries(categoriesMapped) as [_, category]}
-                    <Button on:click={() => showCategory(category.id)}>{category.title}</Button>
-                {/each}
-            </Row>
+
             <Row>
                 <Column sm={1} md={1} lg={2}>
                     {#each shownNotes as note}
@@ -143,4 +156,67 @@
                 onNewCreated={onNewCategoryCreated}
         />
     </div>
+    </main>
+    <section class="drawer">
+        <article>
+
+        </article>
+    </section>
 {/if}
+
+    <footer>
+        <div>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. At, dolorum et eveniet exercitationem facilis fugit impedit in inventore laudantium mollitia, odit perferendis quisquam, sed similique tempora ut vel vero voluptas.</p>
+        </div>
+    </footer>
+</div>
+
+<style>
+    .container {
+        height: 100%;
+        grid-template-areas:
+                "sidebar header drawer"
+                "sidebar main drawer"
+                "sidebar footer footer";
+        grid-template-columns: max-content 1fr 300px;
+        grid-template-rows: min-content 1fr min-content;
+        background: lightblue;
+        display: grid;
+    }
+
+    main{
+        display: grid;
+        grid-area: main;
+
+        justify-content: center;
+        align-content: center;
+    }
+
+    .sidebar {
+        min-width: auto;
+        grid-area: sidebar;
+        display: grid;
+        background: cornsilk;
+    }
+    .drawer {
+        background: crimson;
+        color: white;
+        grid-area: drawer;
+    }
+
+    header{
+        background: tomato;
+        grid-area: header;
+    }
+
+    footer{
+        background: chocolate;
+        grid-area: footer;
+    }
+
+    button.category-btn{
+        display: inline-block;
+        width: 50px;
+        height: 50px;
+    }
+</style>
