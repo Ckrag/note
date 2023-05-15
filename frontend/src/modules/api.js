@@ -35,6 +35,20 @@ export class Api {
         }
     }
 
+    async createUser(email, password) {
+        const body = {
+            email: email,
+            raw_password: password
+        }
+        const promise = await this.#noteApiFetch("POST", "/user/create", null, body)
+        if (!promise.ok) {
+            console.error("/user/create", promise)
+            return null
+        } else {
+            return await promise.json()
+        }
+    }
+
     async getUserOrgs(token) {
         const promise = await this.#noteApiFetch("GET", "/user/organizations", token)
         if (!promise.ok) {

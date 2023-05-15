@@ -20,11 +20,16 @@
 
     const handleSubmit = async (e) => {
         console.log(email, password);
-        let logindata = await api.login(email, password)
-        if (logindata == null) {
+        let createData = await api.createUser(email, password)
+        if (createData == null) {
+            console.log("Error during creation")
+            return
+        }
+        let loginData = await api.login(email, password)
+        if (loginData == null) {
             console.log("Error during login")
         } else {
-            let orgData = await api.getUserOrgs(logindata.access_token)
+            let orgData = await api.getUserOrgs(loginData.access_token)
             if (orgData == null) {
                 console.log("Error loading orgs")
                 sessionProps.setSelectedOrgId(null)
@@ -33,24 +38,21 @@
                     sessionProps.setSelectedOrgId(orgData.organizations[0].orgId)
                 }
             }
-            auth.updateAccessToken(logindata.access_token, logindata.expires_in, email)
-            EventBus.get().onLogin(logindata.access_token)
+            auth.updateAccessToken(loginData.access_token, loginData.expires_in, email)
+            EventBus.get().onLogin(loginData.access_token)
         }
         open = false
     }
-    const navigateToSignup = () => {
-        console.log("Navigated to signup, not impl. yet!")
-    };
 
 
 </script>
 
-<Button on:click={() => open = true}>Login</Button>
+<Button on:click={() => open = true}>Create User</Button>
 
 <Modal
         bind:open
-        modalHeading="Login"
-        primaryButtonText="Confirm"
+        modalHeading="Create User"
+        primaryButtonText="Create"
         secondaryButtonText="Cancel"
         on:click:button--secondary={() => (open = false)}
         on:open
@@ -60,10 +62,5 @@
     <form on:submit|preventDefault="{handleSubmit}">
         <TextInput type="email" bind:value="{email}" labelText="Email " placeholder="your@mail.com"/>
         <PasswordInput bind:value="{password}" labelText="Password" placeholder="Enter password..."/>
-
     </form>
-    <p>
-        Don't have an account?
-        <strong class="link" on:click="{navigateToSignup}">Sign up</strong>
-    </p>
 </Modal>

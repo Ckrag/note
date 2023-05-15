@@ -1,5 +1,6 @@
 <script>
     import Login from '../components/login.svelte';
+    import CreateUser from '../components/create_user.svelte'
     import CreateNote from '../components/create_note.svelte'
     import CreateCategory from '../components/create_category.svelte'
     import {Button, Column, Grid, Row} from "carbon-components-svelte";
@@ -14,7 +15,8 @@
     let auth
     const onLogin = (accessToken) => {
         console.log("Svelte page heard about login")
-        loadCategories(accessToken)
+        window.location.reload();
+        //loadCategories(accessToken)
     }
     const onLogout = () => {
         console.log("Svelte page heard about logout")
@@ -36,6 +38,7 @@
             data.categories.forEach((category) => {
                 m[category.id] = category
             })
+            console.log("Loaded categories", m)
             categoriesMapped = m
         })
     }
@@ -85,15 +88,22 @@
         noteSelectionId = noteId;
     };
 
+    const logout = () => {
+        auth.clearAccessToken()
+        window.location.reload();
+    }
+
 
     // https://carbon-components-svelte.onrender.com/components/
 </script>
 
 <div style="margin-bottom: 20px;">
     {#if auth && auth.isLoggedIn()}
-        <Button>Logout</Button>
+        <Button on:click={() => logout()}>Logout</Button>
+        <p>Username: {auth.getEmail()}</p>
     {:else}
         <Login/>
+        <CreateUser/>
     {/if}
 </div>
 
