@@ -17,6 +17,9 @@
         const api = new Api()
         let categories = api.getCategories(accessToken, orgId)
         categories.then((data) => {
+            if (data.categories.length === 0) {
+                return
+            }
             selectableCategories = data.categories.map((category) => {
                 return {
                     id: category.id,

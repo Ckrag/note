@@ -1,6 +1,5 @@
 package com.note
 
-import io.micronaut.context.annotation.Bean
 import jakarta.inject.Singleton
 import jooq.Tables
 import jooq.tables.Users

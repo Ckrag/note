@@ -27,10 +27,11 @@ class OrganizationRepository(
     }
 
     fun create(name: String): OrganizationDto {
+        println("creating org: $name")
         val id = dslCtx.insertInto(ORGANIZATION, ORGANIZATION.NAME)
             .values(name)
             .returningResult(ORGANIZATION.ID)
-            .execute()
+            .fetchOneInto(Int::class.java)  ?: throw NotFoundException("creating org under name $name")
         return findById(id)
     }
 

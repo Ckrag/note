@@ -22,7 +22,9 @@ class CategoryController(
     @Produces(MediaType.APPLICATION_JSON)
     @Get(value = "/all")
     fun getCategories(authentication: Authentication, orgId: Int): HttpResponse<UserCategoriesResponse> {
-        return HttpResponse.ok(UserCategoriesResponse(this.categoryService.getUserCategories(authentication, orgId)))
+        println("Getting categories for: ${authentication.name}")
+        val categories = this.categoryService.getUserCategories(authentication, orgId)
+        return HttpResponse.ok(UserCategoriesResponse(categories))
     }
 
     @Produces(MediaType.APPLICATION_JSON)

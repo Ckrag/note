@@ -18,7 +18,7 @@
     let password;
     let open = false;
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (_) => {
         console.log(email, password);
         let logindata = await api.login(email, password)
         if (logindata == null) {

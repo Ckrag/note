@@ -12,6 +12,7 @@ class CategoryService(
 ) {
 
     fun getUserCategories(authentication: Authentication, orgId: Int) : List<Category> {
+        println("getting categories for org $orgId")
         val user = userRepo.getUserByEmail(authentication.name)
         val org = orgMemRepo.getOrganization(user, orgId, OrganizationRole.USER)
         return categoryRepo.getAllCategories(user, org)

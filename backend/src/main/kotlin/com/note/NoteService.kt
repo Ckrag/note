@@ -19,6 +19,7 @@ class NoteService(
     }
 
     fun findNotesByCategory(authentication: Authentication, orgId: Int, categoryId: Int): List<NoteDto> {
+        println("finding notes by category, org: $orgId, category id: $categoryId")
         val user = userRepo.getUserByEmail(authentication.name)
         val org = orgMembershipRepo.getOrganization(user, orgId, OrganizationRole.USER)
         val category = categoryRepository.getCategoryById(user, org, categoryId)

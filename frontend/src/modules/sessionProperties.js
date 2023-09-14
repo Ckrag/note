@@ -20,6 +20,13 @@ export class SessionProperties {
         this.#props = JSON.parse(data)
     }
 
+    clearLocalProps() {
+        // TODO:
+        this.storage.setItem('session_properties', "{}")
+        //this.#props = {}
+        this.#load()
+    }
+
     #getPropSafely(propName) {
         if (propName in this.#props) {
             return this.#props[propName]

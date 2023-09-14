@@ -51,10 +51,11 @@ class OrganizationMembershipRepository(
 
     fun getOrganization(user: User, orgId: Int, role: OrganizationRole): OrganizationDto {
         return this.dslCtx
-            .select().from(ORGANIZATION)
+            .select(ORGANIZATION.ID, ORGANIZATION.NAME)
+            .from(ORGANIZATION)
             .join(USER_ORGANIZATION_MEMBERSHIP)
             .on(USER_ORGANIZATION_MEMBERSHIP.ORGANIZATION_ID.eq(ORGANIZATION.ID))
-            .where(USER_ORGANIZATION_MEMBERSHIP.USER_ID.eq(user.id)).and(USER_ORGANIZATION_MEMBERSHIP.ROLE.eq(role))
+            .where(USER_ORGANIZATION_MEMBERSHIP.USER_ID.eq(user.id).and(USER_ORGANIZATION_MEMBERSHIP.ROLE.eq(role)))
             .and(ORGANIZATION.ID.eq(orgId))
             .fetchOneInto(OrganizationDto::class.java) ?:
             throw NotFoundException("No organization with ID $orgId found for user ID ${user.id}")

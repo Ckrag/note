@@ -18,7 +18,7 @@
     let password;
     let open = false;
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (_) => {
         console.log(email, password);
         let createData = await api.createUser(email, password)
         if (createData == null) {

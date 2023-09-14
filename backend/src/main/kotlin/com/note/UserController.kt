@@ -25,10 +25,12 @@ class UserController(
     @Post(value = "/create")
     fun createUserWithOrg(@Body @Valid userDto: CreateUserDto): HttpResponse<UserDto> {
         return try {
+            println("CALLING ORG REPO CREATE")
             val org = organizationRepository.create(userDto.email)
             val user = userService.createUser(userDto)
             organizationMembershipRepository.grantAccess(user, OrganizationRole.USER, org)
             organizationMembershipRepository.grantAccess(user, OrganizationRole.ADMIN, org)
+            println("created user ${user.email} under org ${org.id}")
             HttpResponse.created(UserDto(user.id, user.email))
         } catch (e: AlreadyExistsException) {
             HttpResponse.status(HttpStatus.CONFLICT)

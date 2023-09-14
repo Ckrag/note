@@ -90,6 +90,7 @@
 
     const logout = () => {
         auth.clearAccessToken()
+        sessionProps.clearLocalProps()
         window.location.reload();
     }
 

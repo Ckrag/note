@@ -4,8 +4,7 @@ import com.nimbusds.jwt.JWTParser
 import com.nimbusds.jwt.SignedJWT
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpResponse
-import io.micronaut.http.HttpStatus.OK
-import io.micronaut.http.HttpStatus.UNAUTHORIZED
+import io.micronaut.http.HttpStatus.*
 import io.micronaut.http.MediaType.TEXT_PLAIN
 import io.micronaut.http.client.HttpClient
 import io.micronaut.http.client.annotation.Client
@@ -14,10 +13,7 @@ import io.micronaut.security.authentication.UsernamePasswordCredentials
 import io.micronaut.security.token.jwt.render.BearerAccessRefreshToken
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNotNull
-import org.junit.jupiter.api.Assertions.assertThrows
-import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
 @MicronautTest
@@ -37,14 +33,18 @@ class JwtAuthenticationTest {
 
     @Test
     fun uponSuccessfulAuthenticationAJsonWebTokenIsIssuedToTheUser() {
-        val creds = UsernamePasswordCredentials("sherlock", "password")
-        val request: HttpRequest<*> = HttpRequest.POST("/login", creds)
-        val rsp: HttpResponse<BearerAccessRefreshToken> =
-            client.toBlocking().exchange(request, BearerAccessRefreshToken::class.java)
-        assertEquals(OK, rsp.status)
+        val createReq = HttpRequest.POST("/user/create", CreateUserDto("l@m.dk", "my-pass"))
+        val createRsp = client.toBlocking().exchange(createReq, UserDto::class.java)
+        assertEquals(CREATED, createRsp.status)
 
-        val bearerAccessRefreshToken: BearerAccessRefreshToken = rsp.body() as BearerAccessRefreshToken
-        assertEquals("sherlock", bearerAccessRefreshToken.username)
+        val creds = UsernamePasswordCredentials("l@m.dk", "my-pass")
+        val request: HttpRequest<*> = HttpRequest.POST("/login", creds)
+        val loginRsp: HttpResponse<BearerAccessRefreshToken> =
+            client.toBlocking().exchange(request, BearerAccessRefreshToken::class.java)
+        assertEquals(OK, loginRsp.status)
+
+        val bearerAccessRefreshToken: BearerAccessRefreshToken = loginRsp.body() as BearerAccessRefreshToken
+        assertEquals("l@m.dk", bearerAccessRefreshToken.username)
         assertNotNull(bearerAccessRefreshToken.accessToken)
         assertTrue(JWTParser.parse(bearerAccessRefreshToken.accessToken) is SignedJWT)
 
@@ -54,7 +54,7 @@ class JwtAuthenticationTest {
             .bearerAuth(accessToken)
         val response: HttpResponse<String> = client.toBlocking().exchange(requestWithAuthorization, String::class.java)
 
-        assertEquals(OK, rsp.status)
-        assertEquals("sherlock", response.body())
+        assertEquals(OK, loginRsp.status)
+        assertEquals("m@l.dk", response.body())
     }
 }

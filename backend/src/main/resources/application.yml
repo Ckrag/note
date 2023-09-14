@@ -5,13 +5,15 @@ micronaut:
     port: 8080
     cors: #https://docs.micronaut.io/1.2.5/guide/index.html#cors
       enabled: true
-      configurations:
-        dev:
-          allowedOrigins:
-            - http://localhost:5173
-        prod:
-          allowedOrigins:
-            - ${CORS_ORIGIN:fubar}
+      #configurations:
+      #  dev:
+      #    allowedOrigins:
+      #      - http://localhost:5173
+      #      - http://0.0.0.0:5173
+      #      - http://127.0.0.1:5173
+      #  prod:
+      #    allowedOrigins:
+      #      - ${CORS_ORIGIN:fubar}
   security:
     authentication: bearer
     token:
